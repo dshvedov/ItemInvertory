@@ -8,10 +8,6 @@ public class ItemContract {
     private ItemContract() {
     }
 
-    /**
-     * Inner class that defines constant values for the pets database table.
-     * Each entry in the table represents a single pet.
-     */
     public static final class ItemEntry implements BaseColumns {
 
         public final static String TABLE_NAME = "items";
