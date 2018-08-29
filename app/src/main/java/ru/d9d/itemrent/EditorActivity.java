@@ -1,5 +1,6 @@
 package ru.d9d.itemrent;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -7,9 +8,12 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -33,6 +37,10 @@ public class EditorActivity extends AppCompatActivity implements
      * Identifier for the item data loader
      */
     private static final int EXISTING_ITEM_LOADER = 0;
+
+    // Constants for requesting phone calling permission
+    private static final int PERMISSIONS_REQUEST_PHONE_CALL = 100;
+    private static String[] PERMISSIONS_PHONECALL = {Manifest.permission.CALL_PHONE};
 
     private boolean mItemHasChanged = false;
 
@@ -68,19 +76,21 @@ public class EditorActivity extends AppCompatActivity implements
             plusQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(TextUtils.isEmpty(mQuantityEditText.getText())) mQuantityEditText.setText("0");
+                    if (TextUtils.isEmpty(mQuantityEditText.getText()))
+                        mQuantityEditText.setText("0");
                     int quantity = Integer.parseInt(mQuantityEditText.getText().toString());
-                    mQuantityEditText.setText(String.valueOf(quantity+1));
+                    mQuantityEditText.setText(String.valueOf(quantity + 1));
                 }
             });
             Button minusQuantity = findViewById(R.id.button_minus_quantity);
             minusQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(TextUtils.isEmpty(mQuantityEditText.getText())) mQuantityEditText.setText("0");
+                    if (TextUtils.isEmpty(mQuantityEditText.getText()))
+                        mQuantityEditText.setText("0");
                     int quantity = Integer.parseInt(mQuantityEditText.getText().toString());
-                    if (quantity>0)
-                        mQuantityEditText.setText(String.valueOf(quantity-1));
+                    if (quantity > 0)
+                        mQuantityEditText.setText(String.valueOf(quantity - 1));
                     else
                         Toast.makeText(getApplicationContext(), getString(R.string.decrease_quantity_zero), Toast.LENGTH_SHORT).show();
                 }
@@ -114,7 +124,7 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private void saveItem() {
 
-        boolean validData=true;
+        boolean validData = true;
         String nameString = mNameEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String pricePurchaseString = mPricePurchaseEditText.getText().toString().trim();
@@ -125,38 +135,60 @@ public class EditorActivity extends AppCompatActivity implements
         // Do not save anything if new item and all values are empty
         if (mCurrentItemUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(quantityString)
                 && TextUtils.isEmpty(pricePurchaseString) && TextUtils.isEmpty(priceSellString)
-                && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone))
+                && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone)){
+            finish();
             return;
+        }
 
         // Check name
         if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(this, getText(R.string.editor_item_name_null),
                     Toast.LENGTH_SHORT).show();
-            validData=false;
+            validData = false;
         }
 
         // Check quantity
         if (TextUtils.isEmpty(quantityString)) {
             Toast.makeText(this, getText(R.string.editor_item_quantity_null),
                     Toast.LENGTH_SHORT).show();
-            validData=false;
+            validData = false;
         }
 
-        // Check prices
+        // Check purchase price
         float pricePurchase = 0;
         if (!TextUtils.isEmpty(pricePurchaseString)) {
             pricePurchase = Float.parseFloat(pricePurchaseString);
+        } else {
+            Toast.makeText(this, getString(R.string.editor_price_purchase_null),
+                    Toast.LENGTH_SHORT).show();
+            validData = false;
         }
+
+        // Check sell price
         float priceSell = 0;
-        if (!TextUtils.isEmpty(priceSellString)) {
+        if (!TextUtils.isEmpty(priceSellString) && Float.parseFloat(priceSellString) != 0) {
             priceSell = Float.parseFloat(priceSellString);
         } else {
             Toast.makeText(this, getString(R.string.editor_price_sell_zero),
                     Toast.LENGTH_SHORT).show();
-            validData=false;
+            validData = false;
         }
 
-        if(validData) {
+        // Check supplier name
+        if (TextUtils.isEmpty(supplierName)) {
+            Toast.makeText(this, getText(R.string.editor_item_supplier_name_null),
+                    Toast.LENGTH_SHORT).show();
+            validData = false;
+        }
+
+        // Check supplier phone
+        if (TextUtils.isEmpty(supplierPhone)) {
+            Toast.makeText(this, getText(R.string.editor_item_supplier_phone_null),
+                    Toast.LENGTH_SHORT).show();
+            validData = false;
+        }
+
+        if (validData) {
             // Create a ContentValues object where column names are the keys,
             // and item attributes from the editor are the values.
             ContentValues values = new ContentValues();
@@ -387,7 +419,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Moving to the first row of the cursor and reading data from it
         if (cursor.moveToFirst()) {
 
-            int idColumnIndex = cursor.getColumnIndex(ItemEntry._ID);
+            int idColumnIndex = cursor.getColumnIndex(BaseColumns._ID);
             int nameColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_QUANTITY);
             int pricePurchaseColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_PURCHASE_PRICE);
@@ -428,7 +460,6 @@ public class EditorActivity extends AppCompatActivity implements
                 }
             });
 
-
             // Attach call supplier button action, if supplier phone present
             if (!TextUtils.isEmpty(supplierPhone)) {
                 Button callButton = findViewById(R.id.button_call_supplier);
@@ -437,12 +468,7 @@ public class EditorActivity extends AppCompatActivity implements
                 callButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + supplierPhone));
-                        try {
-                            startActivity(intent);
-                        } catch (SecurityException e) {
-                            e.printStackTrace();
-                        }
+                        callPhone();
                     }
                 });
             }
@@ -457,6 +483,34 @@ public class EditorActivity extends AppCompatActivity implements
                     showDeleteConfirmationDialog();
                 }
             });
+        }
+    }
+
+    private void callPhone() {
+        String supplierPhone = mSupplierPhoneEditText.getText().toString().trim();
+        if (!TextUtils.isEmpty(supplierPhone)) {
+            // Check the SDK version and whether the permission is already granted or not.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_PHONE_CALL);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + supplierPhone));
+                startActivity(intent);
+            }
+        } else
+            Toast.makeText(this, getText(R.string.phone_call_empty_number), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_PHONE_CALL) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                callPhone();
+            } else {
+                Toast.makeText(this, getText(R.string.phone_call_denied), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

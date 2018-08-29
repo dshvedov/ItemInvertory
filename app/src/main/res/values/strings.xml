@@ -30,10 +30,12 @@
     <string name="keep_editing">Keep Editing</string>
 
     <string name="phone_call_denied">Phone call failed (denied by user?)</string>
+    <string name="phone_call_empty_number">Phone call failed: dialing empty phone number</string>
+
 
     <string name="sell_item_success">Item sold, items remaining: </string>
     <string name="sell_item_error">Item cannot be sold because of error</string>
-    <string name="sell_item_zero">No items to sell</string>
+    <string name="sell_item_zero">No items left to sell</string>
 
     <string name="decrease_quantity_zero">No items left to decrease</string>
 
@@ -43,9 +45,12 @@
     <string name="editor_delete_item_successful">Item deleted</string>
     <string name="editor_delete_item_failed">Error with deleting item</string>
     <!-- Fields requirements -->
+    <string name="editor_price_purchase_null">Purchase price must be set.</string>
     <string name="editor_price_sell_zero">Sell price must be set to non-zero value.</string>
     <string name="editor_item_name_null">Item name is required. Please fill item name.</string>
     <string name="editor_item_quantity_null">Please fill item quantity.</string>
+    <string name="editor_item_supplier_name_null">Please fill supplier name.</string>
+    <string name="editor_item_supplier_phone_null">Please fill supplier phone.</string>
     <!-- Editor menu strings -->
     <string name="category_generic">Generic data</string>
     <string name="category_price">Price (purchase and sell)</string>

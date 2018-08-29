@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class ItemContract {
+public final class ItemContract {
 
     // Content authority and base paths
     public static final String CONTENT_AUTHORITY = "ru.d9d.itemrent";
@@ -21,12 +21,6 @@ public class ItemContract {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_ITEMS);
 
         public final static String TABLE_NAME = "items";
-
-        /**
-         * Unique ID number for the item (only for use in the database table).
-         * INTEGER
-         */
-        public final static String _ID = BaseColumns._ID;
 
         /**
          * Item name

@@ -1,7 +1,6 @@
 package ru.d9d.itemrent;
 
 import android.app.LoaderManager;
-import android.content.ClipData;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;

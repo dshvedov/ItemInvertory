@@ -2,6 +2,7 @@ package ru.d9d.itemrent;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         TextView priceTextView = view.findViewById(R.id.price);
 
         // Find the columns of item attributes that we're interested in
-        int idColumnIndex = cursor.getColumnIndex(ItemEntry._ID);
+        int idColumnIndex = cursor.getColumnIndex(BaseColumns._ID);
         int nameColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_QUANTITY);
         int sellPriceColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_SELL_PRICE);
