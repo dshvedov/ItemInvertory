@@ -137,7 +137,7 @@ public class EditorActivity extends AppCompatActivity implements
 
         // Check quantity
         if (TextUtils.isEmpty(quantityString)) {
-            Toast.makeText(this, getText(R.string.editor_item_name_null),
+            Toast.makeText(this, getText(R.string.editor_item_quantity_null),
                     Toast.LENGTH_SHORT).show();
             validData=false;
         }
