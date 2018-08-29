@@ -53,13 +53,6 @@ public class ItemContract {
         public final static String COLUMN_ITEM_SUPPLIER_PHONE = "supplier_phone";
 
         /**
-         * Availability
-         * Possible values are {@link #AVAILABILITY_OUT_OF_STOCK}, {@link #AVAILABILITY_IN_STOCK}, {@link #AVAILABILITY_BUSY}.
-         * INTEGER
-         */
-        public final static String COLUMN_ITEM_AVAILABILITY = "availability";
-
-        /**
          * Purchase price
          * REAL (float)
          */
@@ -70,13 +63,6 @@ public class ItemContract {
          * REAL (float)
          */
         public final static String COLUMN_ITEM_SELL_PRICE = "price_sell";
-
-        /**
-         * Possible values for availability.
-         */
-        public static final int AVAILABILITY_OUT_OF_STOCK = 0;
-        public static final int AVAILABILITY_IN_STOCK = 1;
-        public static final int AVAILABILITY_BUSY = 2;
 
         /**
          * The MIME type of the {@link #CONTENT_URI} for items list
@@ -90,16 +76,5 @@ public class ItemContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS;
 
-        /**
-         * Check if availability value is correct
-         */
-        public static boolean isValidAvailability(int availability) {
-            if (availability == AVAILABILITY_OUT_OF_STOCK ||
-                    availability == AVAILABILITY_IN_STOCK ||
-                    availability == AVAILABILITY_BUSY) {
-                return true;
-            }
-            return false;
-        }
     }
 }

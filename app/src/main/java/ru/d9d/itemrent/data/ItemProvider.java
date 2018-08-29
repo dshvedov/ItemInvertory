@@ -117,12 +117,6 @@ public class ItemProvider extends ContentProvider {
             throw new IllegalArgumentException("Invalid item quantity");
         }
 
-        // Check item availability: not null and equal to one of constants
-        Integer availability = values.getAsInteger(ItemEntry.COLUMN_ITEM_AVAILABILITY);
-        if (availability == null || !ItemEntry.isValidAvailability(availability)) {
-            throw new IllegalArgumentException("Invalid item availability value");
-        }
-
         // Check item purchase price: 0 or positive value
         float purchasePrice = values.getAsFloat(ItemEntry.COLUMN_ITEM_PURCHASE_PRICE);
         if (purchasePrice < 0) {
@@ -195,14 +189,6 @@ public class ItemProvider extends ContentProvider {
             Integer quantity = values.getAsInteger(ItemEntry.COLUMN_ITEM_QUANTITY);
             if (quantity == null || quantity < 0) {
                 throw new IllegalArgumentException("Invalid item quantity");
-            }
-        }
-
-        // Check item availability: not null and equal to one of constants
-        if (values.containsKey(ItemEntry.COLUMN_ITEM_AVAILABILITY)) {
-            Integer availability = values.getAsInteger(ItemEntry.COLUMN_ITEM_AVAILABILITY);
-            if (availability == null || !ItemEntry.isValidAvailability(availability)) {
-                throw new IllegalArgumentException("Invalid item availability value");
             }
         }
 

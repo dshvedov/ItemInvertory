@@ -28,5 +28,6 @@
         android:id="@+id/button_sell"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:focusable="false"
         android:text="@string/button_sell" />
 </LinearLayout>
