@@ -3,6 +3,7 @@ package ru.d9d.itemrent.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import ru.d9d.itemrent.data.ItemContract.ItemEntry;
 
@@ -32,8 +33,8 @@ public class ItemDbHelper extends SQLiteOpenHelper {
                 + ItemEntry.COLUMN_ITEM_SUPPLIER_NAME + " TEXT, "
                 + ItemEntry.COLUMN_ITEM_SUPPLIER_PHONE + " TEXT, "
                 + ItemEntry.COLUMN_ITEM_AVAILABILITY + " INTEGER NOT NULL DEFAULT 0, "
-                + ItemEntry.COLUMN_ITEM_PURCHASE_PRICE + " INTEGER, "
-                + ItemEntry.COLUMN_ITEM_SELL_PRICE + " INTEGER)";
+                + ItemEntry.COLUMN_ITEM_PURCHASE_PRICE + " REAL, "
+                + ItemEntry.COLUMN_ITEM_SELL_PRICE + " REAL)";
         db.execSQL(SQL_CREATE_ITEMS_TABLE);
     }
 
@@ -42,5 +43,6 @@ public class ItemDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.e(LOG_TAG, "Updating table from " + oldVersion + " to " + newVersion);
     }
 }

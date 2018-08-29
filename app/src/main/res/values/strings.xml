@@ -3,4 +3,12 @@
 
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
 
+    <string name="action_delete_all">Delete all entries</string>
+
+    <string name="button_sell">Sell</string>
+
+    <string name="item_out_of_stock">Out of stock</string>
+
+    <string name="empty_text">No items in inventory\nTo add item tap plus button at bottom-right</string>
+
 </resources>

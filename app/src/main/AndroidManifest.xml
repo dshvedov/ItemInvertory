@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditorActivity" />
+        <activity android:name=".DetailsActivity" />
+        <provider
+            android:name=".data.ItemProvider"
+            android:authorities="ru.d9d.itemrent"
+            android:exported="false" />
     </application>
 
 </manifest>

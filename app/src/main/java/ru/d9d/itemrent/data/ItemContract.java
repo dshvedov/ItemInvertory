@@ -1,14 +1,24 @@
 package ru.d9d.itemrent.data;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class ItemContract {
+
+    // Content authority and base paths
+    public static final String CONTENT_AUTHORITY = "ru.d9d.itemrent";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_ITEMS = "items";
 
     // Empty constructor.
     private ItemContract() {
     }
 
     public static final class ItemEntry implements BaseColumns {
+
+
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_ITEMS);
 
         public final static String TABLE_NAME = "items";
 
@@ -51,13 +61,13 @@ public class ItemContract {
 
         /**
          * Purchase price
-         * INTEGER
+         * REAL (float)
          */
         public final static String COLUMN_ITEM_PURCHASE_PRICE = "price_purchase";
 
         /**
          * Sell price
-         * INTEGER
+         * REAL (float)
          */
         public final static String COLUMN_ITEM_SELL_PRICE = "price_sell";
 
@@ -67,5 +77,29 @@ public class ItemContract {
         public static final int AVAILABILITY_OUT_OF_STOCK = 0;
         public static final int AVAILABILITY_IN_STOCK = 1;
         public static final int AVAILABILITY_BUSY = 2;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for items list
+         */
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a single item
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS;
+
+        /**
+         * Check if availability value is correct
+         */
+        public static boolean isValidAvailability(int availability) {
+            if (availability == AVAILABILITY_OUT_OF_STOCK ||
+                    availability == AVAILABILITY_IN_STOCK ||
+                    availability == AVAILABILITY_BUSY) {
+                return true;
+            }
+            return false;
+        }
     }
 }
